@@ -32,9 +32,9 @@ export const Header = () => {
             <Button 
               variant="ghost" 
               size="icon" 
-              className="neu-button relative h-8 w-8 sm:h-10 sm:w-10"
+              className="relative h-8 w-8 sm:h-10 sm:w-10"
             >
-              <Bell className="w-4 h-4 sm:w-5 sm:h-5" />
+              <Bell className="w-4 h-4 sm:w-5 sm:h-5 text-foreground" />
               <Badge className="absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center p-0 bg-destructive text-[8px] sm:text-[10px]">
                 3
               </Badge>
@@ -43,19 +43,19 @@ export const Header = () => {
             <Button 
               variant="ghost" 
               size="icon" 
-              className="neu-button h-8 w-8 sm:h-10 sm:w-10"
+              className="h-8 w-8 sm:h-10 sm:w-10"
               onClick={() => navigate("/settings")}
             >
-              <SettingsIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+              <SettingsIcon className="w-4 h-4 sm:w-5 sm:h-5 text-foreground" />
             </Button>
 
             <Button 
               variant="ghost" 
               size="icon" 
-              className="neu-button h-8 w-8 sm:h-10 sm:w-10"
+              className="h-8 w-8 sm:h-10 sm:w-10"
               onClick={() => navigate("/profile")}
             >
-              <User className="w-4 h-4 sm:w-5 sm:h-5" />
+              <User className="w-4 h-4 sm:w-5 sm:h-5 text-foreground" />
             </Button>
           </div>
         </div>
