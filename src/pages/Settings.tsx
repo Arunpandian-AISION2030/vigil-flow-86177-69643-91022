@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTheme } from "next-themes";
 import { Header } from "@/components/surveillance/Header";
 import { MobileNav } from "@/components/MobileNav";
 import { Card } from "@/components/ui/card";
@@ -21,6 +22,7 @@ import {
 
 const Settings = () => {
   const { toast } = useToast();
+  const { theme, setTheme } = useTheme();
   const [settings, setSettings] = useState({
     emailNotifications: true,
     pushNotifications: false,
@@ -28,7 +30,6 @@ const Settings = () => {
     autoAnalysis: true,
     dataRetention: "30",
     twoFactor: false,
-    darkMode: false,
     language: "en",
   });
 
@@ -194,9 +195,9 @@ const Settings = () => {
                 <p className="text-xs text-muted-foreground">Use dark theme</p>
               </div>
               <Switch
-                checked={settings.darkMode}
+                checked={theme === "dark"}
                 onCheckedChange={(checked) =>
-                  setSettings({ ...settings, darkMode: checked })
+                  setTheme(checked ? "dark" : "light")
                 }
               />
             </div>
