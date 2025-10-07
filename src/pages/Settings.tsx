@@ -96,7 +96,7 @@ const Settings = () => {
             <div className="space-y-2">
               <Label>Alert Threshold</Label>
               <select
-                className="neu-input w-full p-2 text-sm"
+                className="neu-input w-full p-2 text-sm text-foreground"
                 value={settings.alertThreshold}
                 onChange={(e) =>
                   setSettings({ ...settings, alertThreshold: e.target.value })
@@ -173,7 +173,7 @@ const Settings = () => {
 
             <div className="space-y-2">
               <Label>Change Password</Label>
-              <Button variant="outline" className="neu-button w-full">
+              <Button variant="outline" className="w-full">
                 Update Password
               </Button>
             </div>
@@ -205,7 +205,7 @@ const Settings = () => {
             <div className="space-y-2">
               <Label>Language</Label>
               <select
-                className="neu-input w-full p-2 text-sm"
+                className="neu-input w-full p-2 text-sm text-foreground"
                 value={settings.language}
                 onChange={(e) =>
                   setSettings({ ...settings, language: e.target.value })
@@ -222,7 +222,7 @@ const Settings = () => {
 
         {/* Save Button */}
         <div className="flex gap-3">
-          <Button onClick={handleSave} className="neu-button flex-1 gap-2">
+          <Button onClick={handleSave} className="flex-1 gap-2">
             <Save className="w-4 h-4" />
             Save Changes
           </Button>
