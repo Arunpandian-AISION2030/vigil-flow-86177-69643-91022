@@ -19,11 +19,12 @@ import {
   Eye, 
   Moon, 
   Save,
-  User,
+  UserCircle2,
   Mail,
   Phone,
   Building,
-  LogOut
+  LogOut,
+  User
 } from "lucide-react";
 
 const Settings = () => {
@@ -162,9 +163,14 @@ const Settings = () => {
 
         {/* Profile Section */}
         <Card className="neu-card p-6 animate-slide-up">
+          <div className="flex items-center gap-3 mb-4">
+            <UserCircle2 className="w-5 h-5 text-primary" />
+            <h2 className="text-lg font-semibold">Profile</h2>
+          </div>
+          <Separator className="mb-4" />
           <div className="flex items-center gap-4 mb-4">
             <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center">
-              <User className="w-8 h-8 text-primary" />
+              <UserCircle2 className="w-8 h-8 text-primary" />
             </div>
             <div className="flex-1">
               <h2 className="text-xl font-bold">{profile.full_name}</h2>
@@ -177,7 +183,6 @@ const Settings = () => {
               )}
             </div>
           </div>
-          <Separator className="mb-4" />
           
           <form onSubmit={handleUpdateProfile} className="space-y-4">
             <div className="space-y-2">
@@ -311,7 +316,7 @@ const Settings = () => {
         {/* AI & Analysis */}
         <Card className="neu-card p-6 animate-slide-up">
           <div className="flex items-center gap-3 mb-4">
-            <Eye className="w-5 h-5 text-accent" />
+            <Eye className="w-5 h-5 text-primary" />
             <h2 className="text-lg font-semibold">AI & Analysis</h2>
           </div>
           <Separator className="mb-4" />
@@ -350,7 +355,7 @@ const Settings = () => {
         {/* Security */}
         <Card className="neu-card p-6 animate-slide-up">
           <div className="flex items-center gap-3 mb-4">
-            <Shield className="w-5 h-5 text-success" />
+            <Shield className="w-5 h-5 text-primary" />
             <h2 className="text-lg font-semibold">Security</h2>
           </div>
           <Separator className="mb-4" />
