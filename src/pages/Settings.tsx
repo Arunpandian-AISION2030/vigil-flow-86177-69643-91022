@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
 import { Header } from "@/components/surveillance/Header";
 import { MobileNav } from "@/components/MobileNav";
@@ -8,21 +8,29 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 import { 
   Settings as SettingsIcon, 
   Bell, 
   Shield, 
   Eye, 
   Moon, 
-  Globe,
-  Database,
-  Save
+  Save,
+  User,
+  Mail,
+  Phone,
+  Building,
+  LogOut
 } from "lucide-react";
 
 const Settings = () => {
   const { toast } = useToast();
   const { theme, setTheme } = useTheme();
+  const { user, signOut } = useAuth();
+  const [loading, setLoading] = useState(false);
   const [settings, setSettings] = useState({
     emailNotifications: true,
     pushNotifications: false,
@@ -32,6 +40,100 @@ const Settings = () => {
     twoFactor: false,
     language: "en",
   });
+  const [profile, setProfile] = useState({
+    full_name: "",
+    email: "",
+    phone: "",
+    department: "",
+    badge_number: "",
+  });
+  const [userRole, setUserRole] = useState<string>("");
+
+  useEffect(() => {
+    if (user) {
+      fetchProfile();
+      fetchUserRole();
+    }
+  }, [user]);
+
+  const fetchProfile = async () => {
+    if (!user) return;
+
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("id", user.id)
+      .single();
+
+    if (data) {
+      setProfile({
+        full_name: data.full_name || "",
+        email: data.email || "",
+        phone: data.phone || "",
+        department: data.department || "",
+        badge_number: data.badge_number || "",
+      });
+    }
+  };
+
+  const fetchUserRole = async () => {
+    if (!user) return;
+
+    const { data } = await supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", user.id)
+      .single();
+
+    if (data) {
+      setUserRole(data.role);
+    }
+  };
+
+  const handleUpdateProfile = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!user) return;
+
+    setLoading(true);
+
+    const { error } = await supabase
+      .from("profiles")
+      .update({
+        full_name: profile.full_name,
+        phone: profile.phone,
+        department: profile.department,
+        badge_number: profile.badge_number,
+      })
+      .eq("id", user.id);
+
+    if (error) {
+      toast({
+        title: "Update failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Profile updated",
+        description: "Your profile has been updated successfully.",
+      });
+    }
+
+    setLoading(false);
+  };
+
+  const getRoleBadgeColor = (role: string) => {
+    switch (role) {
+      case "admin":
+        return "bg-destructive/10 text-destructive border-destructive/30";
+      case "security":
+        return "bg-primary/10 text-primary border-primary/30";
+      case "faculty":
+        return "bg-success/10 text-success border-success/30";
+      default:
+        return "bg-muted text-muted-foreground border-border";
+    }
+  };
 
   const handleSave = () => {
     toast({
@@ -52,11 +154,107 @@ const Settings = () => {
               <SettingsIcon className="w-8 h-8 text-primary" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold">Settings</h1>
-              <p className="text-sm text-muted-foreground">Manage your preferences and security</p>
+              <h1 className="text-2xl font-bold">Settings & Profile</h1>
+              <p className="text-sm text-muted-foreground">Manage your preferences, profile and security</p>
             </div>
           </div>
         </div>
+
+        {/* Profile Section */}
+        <Card className="neu-card p-6 animate-slide-up">
+          <div className="flex items-center gap-4 mb-4">
+            <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center">
+              <User className="w-8 h-8 text-primary" />
+            </div>
+            <div className="flex-1">
+              <h2 className="text-xl font-bold">{profile.full_name}</h2>
+              <p className="text-sm text-muted-foreground">{profile.email}</p>
+              {userRole && (
+                <Badge variant="outline" className={`mt-2 ${getRoleBadgeColor(userRole)}`}>
+                  <Shield className="w-3 h-3 mr-1" />
+                  {userRole.toUpperCase()}
+                </Badge>
+              )}
+            </div>
+          </div>
+          <Separator className="mb-4" />
+          
+          <form onSubmit={handleUpdateProfile} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="full_name">
+                <User className="w-4 h-4 inline mr-2" />
+                Full Name
+              </Label>
+              <Input
+                id="full_name"
+                value={profile.full_name}
+                onChange={(e) => setProfile({ ...profile, full_name: e.target.value })}
+                className="neu-input"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="email">
+                <Mail className="w-4 h-4 inline mr-2" />
+                Email
+              </Label>
+              <Input
+                id="email"
+                type="email"
+                value={profile.email}
+                disabled
+                className="neu-input opacity-50"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="phone">
+                <Phone className="w-4 h-4 inline mr-2" />
+                Phone
+              </Label>
+              <Input
+                id="phone"
+                type="tel"
+                value={profile.phone}
+                onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
+                placeholder="+1 (555) 123-4567"
+                className="neu-input"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="department">
+                <Building className="w-4 h-4 inline mr-2" />
+                Department
+              </Label>
+              <Input
+                id="department"
+                value={profile.department}
+                onChange={(e) => setProfile({ ...profile, department: e.target.value })}
+                placeholder="Campus Security"
+                className="neu-input"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="badge_number">
+                <Shield className="w-4 h-4 inline mr-2" />
+                Badge Number
+              </Label>
+              <Input
+                id="badge_number"
+                value={profile.badge_number}
+                onChange={(e) => setProfile({ ...profile, badge_number: e.target.value })}
+                placeholder="SEC-001"
+                className="neu-input"
+              />
+            </div>
+
+            <Button type="submit" disabled={loading} className="w-full">
+              {loading ? "Saving Profile..." : "Save Profile"}
+            </Button>
+          </form>
+        </Card>
 
         {/* Notifications */}
         <Card className="neu-card p-6 animate-slide-up">
@@ -224,7 +422,15 @@ const Settings = () => {
         <div className="flex gap-3">
           <Button onClick={handleSave} className="flex-1 gap-2">
             <Save className="w-4 h-4" />
-            Save Changes
+            Save Preferences
+          </Button>
+          <Button
+            variant="destructive"
+            onClick={signOut}
+            className="gap-2"
+          >
+            <LogOut className="w-4 h-4" />
+            Sign Out
           </Button>
         </div>
       </div>

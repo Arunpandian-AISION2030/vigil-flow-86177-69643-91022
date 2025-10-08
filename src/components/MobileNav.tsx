@@ -1,4 +1,4 @@
-import { Home, Video, BarChart3, User, Settings } from "lucide-react";
+import { Home, Video, BarChart3, Settings } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 
 export const MobileNav = () => {
@@ -8,7 +8,7 @@ export const MobileNav = () => {
   
   return (
     <nav className="lg:hidden fixed bottom-0 left-0 right-0 neu-card border-t border-border z-50">
-      <div className="grid grid-cols-5 h-16">
+      <div className="grid grid-cols-4 h-16">
         <Link
           to="/home"
           className={`flex flex-col items-center justify-center gap-1 transition-colors ${
@@ -48,25 +48,13 @@ export const MobileNav = () => {
         <Link
           to="/settings"
           className={`flex flex-col items-center justify-center gap-1 transition-colors ${
-            isActive("/settings")
+            isActive("/settings") || isActive("/profile")
               ? "text-primary"
               : "text-muted-foreground hover:text-foreground"
           }`}
         >
           <Settings className="w-5 h-5" />
           <span className="text-xs">Settings</span>
-        </Link>
-        
-        <Link
-          to="/profile"
-          className={`flex flex-col items-center justify-center gap-1 transition-colors ${
-            isActive("/profile")
-              ? "text-primary"
-              : "text-muted-foreground hover:text-foreground"
-          }`}
-        >
-          <User className="w-5 h-5" />
-          <span className="text-xs">Profile</span>
         </Link>
       </div>
     </nav>
