@@ -37,20 +37,22 @@ const Dashboard = () => {
         </div>
 
         <Tabs value={activeView} onValueChange={setActiveView} className="w-full">
-          <TabsList className="gov-section w-full justify-start p-1">
-            <TabsTrigger value="live" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-              Live Feed
-            </TabsTrigger>
-            <TabsTrigger value="map" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-              Map View
-            </TabsTrigger>
-            <TabsTrigger value="timeline" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-              Timeline
-            </TabsTrigger>
-            <TabsTrigger value="analytics" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-              Analytics
-            </TabsTrigger>
-          </TabsList>
+          <div className="gov-section p-1 overflow-x-auto">
+            <TabsList className="w-full min-w-max inline-flex justify-start">
+              <TabsTrigger value="live" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground flex-shrink-0">
+                Live Feed
+              </TabsTrigger>
+              <TabsTrigger value="map" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground flex-shrink-0">
+                Map View
+              </TabsTrigger>
+              <TabsTrigger value="timeline" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground flex-shrink-0">
+                Timeline
+              </TabsTrigger>
+              <TabsTrigger value="analytics" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground flex-shrink-0">
+                Analytics
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mt-6">
             <div className="lg:col-span-3 space-y-6">
